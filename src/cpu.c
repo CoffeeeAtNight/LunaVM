@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdio.h>
 #include <string.h>
 #include "../include/cpu.h"
 #include "../include/memory.h"
@@ -11,6 +12,7 @@ void execute_instruction(uint8_t opcode)
   switch (opcode) 
   {
     case 0x01: // MOV
+      printf("GOT MOV INSTRUCTION");
       break;
     case 0x02: // ADD 
       break;
@@ -34,11 +36,11 @@ void initialize_cpu()
 
 uint8_t fetch_next_opcode()
 {
-  // TODO DO I NEED THIS HERE?
-  return 0;
+  return v_memory[program_counter++];
 }
 
-void run() {
+void run(FILE* program) {
+  initialize_memory();
   while (1) {
     uint8_t opcode = fetch_next_opcode();
     execute_instruction(opcode);
