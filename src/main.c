@@ -12,6 +12,8 @@ int main(int argc, char *argv[])
     return 1;  
   }
 
+  printf("[i] Starting LunaVM with binary: %s\n", argv[1]);
+
   if((program = fopen(argv[1], "r")) == NULL)
     return 1;
   
