@@ -8,15 +8,16 @@ int main(int argc, char *argv[])
   
   if (argv[1] == NULL)
   {
-    printf("Usage: ./lunavm [PATH_TO_PROGRAM_FILE]\n");
-    return 1;  
+    // Ran in program-mode
+    printf("[i] Starting LunaVM with binary: %s\n", argv[1]);
+
+    if((program = fopen(argv[1], "r")) == NULL)
+      return 1;
+    run(program);
   }
 
-  printf("[i] Starting LunaVM with binary: %s\n", argv[1]);
 
-  if((program = fopen(argv[1], "r")) == NULL)
-    return 1;
-  
+  // Ran in general purpose-mode
   run(program);
   return EXIT_SUCCESS;
 }

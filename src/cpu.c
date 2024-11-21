@@ -45,7 +45,6 @@ uint8_t fetch_next_opcode()
 
 void load_program(FILE* program) {
   size_t ret = fread(v_memory, 1, sizeof(v_memory), program);
-  printf("Size of ret is: %zu\n", ret);
   if (ret == 0) {
     fprintf(stderr, "Failed to load program into virtual memory\n");
     exit(EXIT_FAILURE);
