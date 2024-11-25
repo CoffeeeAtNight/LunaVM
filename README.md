@@ -1,14 +1,3 @@
-Here’s an updated version of the **GitHub README** and description for LunaVM, incorporating **MoonlightScript** and its role in the overall system. I've expanded the explanation to highlight how MoonlightScript, the compiler (MLSC), and LunarVM all tie together:
-
----
-
-### **GitHub Short Description**
-🌕 **LunaVM** – A lightweight virtual machine with a custom memory allocator and MoonlightScript integration, designed for executing compiled opcodes or creating an extensible virtualized platform for 2D and 3D applications! 🚀✨
-
----
-
-### **GitHub README**
-
 # 🌙 LunaVM
 
 Welcome to **LunaVM**, a unique virtual machine built from scratch in **C**, designed to execute **MoonlightScript** programs, manage memory efficiently, and act as a foundation for a lightweight operating system or a virtualized platform. 🚀
