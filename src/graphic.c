@@ -20,6 +20,9 @@ bool START_MENU_OPEN = false;
 bool START_MENU_ONE_OPEN = false;
 bool TRANSITION_STATE = false;
 
+Camera CAMERA = { 0 };
+int CAMERA_MODE;
+
 void draw_taskbar_button(const char* text, int posX, int posY, BtnSize size)
 {
   int buttonHeight = 26;
@@ -49,33 +52,37 @@ AppWindowCtx setup_app_window(const char* windowTitle)
   int appWindowH = 640;
   int appWindowX = W_WIDTH / 2 - appWindowW / 2;
   int appWindowY = W_HEIGHT / 2 - appWindowH / 2;
+  int appWindowRenderAreaX = appWindowX;
+  int appWindowRenderAreaY = appWindowY + 30;
+  int appWindowRenderAreaW = appWindowW;
+  int appWindowRenderAreaH = appWindowH - 30;
+
   AppWindowCtx newAppWindow;
 
-  DrawRectangle(appWindowX, appWindowY, appWindowW, appWindowH, BROWN);
-  DrawRectangle(appWindowX, appWindowY, appWindowW, 30, BEIGE);
-  DrawText(windowTitle, appWindowX + 15, appWindowY + 8, 15.0, WHITE);
-  DrawText("Close [ x ]", (appWindowX + appWindowW) - 80, appWindowY + 8, 15.0, RED);
-  DrawRectangle(appWindowX, appWindowY + 30, appWindowW, appWindowH - 30, BLACK);
+  DrawRectangle(appWindowX, appWindowY, appWindowW, appWindowH, BROWN);                                           // Window
+  DrawRectangle(appWindowX, appWindowY, appWindowW, 30, BEIGE);                                                   // Window Bar
+  DrawText(windowTitle, appWindowX + 15, appWindowY + 8, 15.0, WHITE);                                            // Window Bar Title
+  DrawText("Close [ x ]", (appWindowX + appWindowW) - 80, appWindowY + 8, 15.0, RED);                             // Window Close Button
+  DrawRectangle(appWindowRenderAreaX, appWindowRenderAreaY, appWindowRenderAreaW, appWindowRenderAreaH, BLACK);   // Window Render Area
 
-  newAppWindow.posX = appWindowX;
-  newAppWindow.posY = appWindowY;
-  newAppWindow.width = appWindowW;
-  newAppWindow.height = appWindowH;
+  newAppWindow.posX = appWindowRenderAreaX;
+  newAppWindow.posY = appWindowRenderAreaY;
+  newAppWindow.width = appWindowRenderAreaW;
+  newAppWindow.height = appWindowRenderAreaH;
 
   return newAppWindow; 
 }
 
 void process_input(AppState *currentState)
-{
-
-
-}
+{}
 
 void render_desktop(AppState* currentState)
 {
   double startTime = GetTime();
   setup_desktop();
   double desktopTime = GetTime() - startTime;
+
+  BeginDrawing();
 
   DrawFPS(30, 30);
   DrawText(TextFormat("Desktop Render Time: %.3f ms", desktopTime * 1000.0), 30, 50, 20, WHITE);
@@ -117,6 +124,7 @@ void render_desktop(AppState* currentState)
     }
   }
 
+  EndDrawing();
 }
 
 void render_file_manager()
@@ -131,8 +139,20 @@ void render_file_manager()
 
 void render_doom()
 {
+  UpdateCamera(&CAMERA, CAMERA_MODE);
+  Vector3 movement = { 0.f, 0.f, 0.f };
+  Vector3 rotation = { 0.f, 0.f, 0.f };
+  float zoom = 0.f;
+  
+  if(IsKeyDown(KEY_LEFT)) rotation.x = -1.5;
+  if(IsKeyDown(KEY_RIGHT)) rotation.x = 1.5;
+  if(IsKeyDown(KEY_UP)) rotation.y = -1.5;
+  if(IsKeyDown(KEY_DOWN)) rotation.y = 1.5;
+
+  UpdateCameraPro(&CAMERA, movement, rotation, zoom);
+  BeginDrawing();
+
   double startTime = GetTime();
-  // STEP FUNCTION FOR BLOOD MOON
   setup_desktop();
   AppWindowCtx appWindowCtx = setup_app_window("Blood Moon 3D");
   double desktopTime = GetTime() - startTime;
@@ -140,31 +160,30 @@ void render_doom()
   DrawFPS(30, 30);
   DrawText(TextFormat("Blood Moon 3D Render Time: %.3f ms", desktopTime * 1000.0), 30, 50, 20, WHITE);
 
-  Camera camera = { 0 };
-  camera.position = (Vector3){ 0.0f, 2.0f, 4.0f };    // Camera position
-  camera.target = (Vector3){ 0.0f, 2.0f, 0.0f };      // Camera looking at point
-  camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
-  camera.fovy = 60.0f;                                // Camera field-of-view Y
-  camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type
+  DisableCursor();
+  BeginScissorMode(appWindowCtx.posX, appWindowCtx.posY, appWindowCtx.width, appWindowCtx.height);
+  BeginMode3D(CAMERA);
 
-  int cameraMode = CAMERA_FIRST_PERSON;
-
-  UpdateCamera(&camera, cameraMode);
-
-  BeginMode3D(camera);
+  DrawPlane((Vector3){ 0.0f, 0.0f, 0.0f }, (Vector2){ 32.0f, 32.0f }, LIGHTGRAY);
+  DrawCube((Vector3){ -16.0f, 2.5f, 0.0f }, 1.0f, 5.0f, 32.0f, BLUE);
+  DrawCube((Vector3){ 16.0f, 2.5f, 0.0f }, 1.0f, 5.0f, 32.0f, LIME); 
+  DrawCube((Vector3){ 0.0f, 2.5f, 16.0f }, 32.0f, 5.0f, 1.0f, GOLD);
   Vector3 cubePosition = { 
-      (float)(appWindowCtx.posX - (float)W_WIDTH / 2) / W_WIDTH * 10.0f, // Scale to 3D space
-      0.0f, 
+      (float)(appWindowCtx.posX - (float)W_WIDTH / 2) / W_WIDTH * 10.0f,
+      5.0f,     
       (float)(appWindowCtx.posY - (float)W_HEIGHT / 2) / W_HEIGHT * 10.0f 
   };
   DrawCube(cubePosition, 1.0f, 1.0f, 1.0f, BLUE);
+  DrawCubeWires(cubePosition, 1.0f, 1.0f, 1.0f, MAROON);
 
   EndMode3D();
+  EndScissorMode();
+  EndDrawing();
 }
 
 void render(AppState* currentState)
 {
-  BeginDrawing();
+  
 
   // Setup the back buffer for drawing (clear color and depth buffers)
   ClearBackground(DARKGRAY);
@@ -181,9 +200,6 @@ void render(AppState* currentState)
       render_doom();
       break;
   }
-
-  // End the frame and get ready for the next one  (display frame, poll input, etc...)
-  EndDrawing();
 }
 
 int initialize_render_ctx()
@@ -198,7 +214,15 @@ int initialize_render_ctx()
 	SearchAndSetResourceDir("resources");
 
   // Cap to 60 FPS
-  SetTargetFPS(60);  
+  SetTargetFPS(60);
+
+  CAMERA.position = (Vector3){ 0.0f, 2.0f, 4.0f };    // Camera position
+  CAMERA.target = (Vector3){ 0.0f, 2.0f, 0.0f };      // Camera looking at point
+  CAMERA.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
+  CAMERA.fovy = 60.0f;                                // Camera field-of-view Y
+  CAMERA.projection = CAMERA_PERSPECTIVE;             // Camera projection type
+
+  CAMERA_MODE = CAMERA_FIRST_PERSON;
 
   return EXIT_SUCCESS;
 }
