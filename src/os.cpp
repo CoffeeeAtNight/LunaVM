@@ -3,13 +3,13 @@
 #include <memory>
 #include <stdio.h>
 #include "../include/program_manager.h"
+#include "../include/blood_moon_3d.h"
 
 AppState CURRENT_STATE = STATE_DESKTOP;
 
 void register_programs(ProgramManager* pManager)
 {
-  //BloodMoon3d bloodMoon3d = BloodMoon3d()
-  //pManager->registerProgram(std::unique_ptr<LvmProgram>()); 
+  pManager->registerProgram(std::unique_ptr<BloodMoon3d>());
 };
 
 void gpm_main()
@@ -25,7 +25,7 @@ void gpm_main()
   // Main application loop
   while (!WindowShouldClose()) {
     process_input(&CURRENT_STATE);
-    render(&CURRENT_STATE);
+    render(&CURRENT_STATE, &pManager);
   }
 
   CloseWindow();

@@ -181,10 +181,8 @@ void render_doom()
   EndDrawing();
 }
 
-void render(AppState* currentState)
+void render(AppState* currentState, ProgramManager* pManager)
 {
-  
-
   // Setup the back buffer for drawing (clear color and depth buffers)
   ClearBackground(DARKGRAY);
   
