@@ -1,7 +1,7 @@
 #ifndef LVM_PROGRAM_H
 #define LVM_PROGRAM_H 
 
-#include "../build/external/raylib-master/src/raylib.h"
+#include "../raylib/src/raylib.h"
 #include <cstdint>
 
 class LvmProgram {

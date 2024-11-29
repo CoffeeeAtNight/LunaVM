@@ -2,68 +2,40 @@
 #define PROGRAM_MANAGER_H
 
 #include <algorithm>
+#include <cstdio>
+#include <iostream>
 #include <vector>
 #include <memory>
-#include <string.h>
+#include <cstring> 
 #include "lvm_program.h"
 
 class ProgramManager {
 private:
-  std::vector<std::unique_ptr<LvmProgram>> programs; 
-  LvmProgram* activeProgram = nullptr;
+    std::vector<std::unique_ptr<LvmProgram>> programs; 
+    LvmProgram* activeProgram = nullptr;
+
 public:
-  // Register a program
-  void registerProgram(std::unique_ptr<LvmProgram> program) {
-    programs.push_back(std::move(program));
-  }
+    // Register a program
+    void registerProgram(std::unique_ptr<LvmProgram> program);
 
-  // Initialize all programs
-  void initAll() {
-    for (auto& program : programs) {
-      program->init();
-    }
-  }
+    // Initialize all programs
+    void initAll();
 
-  // Update the active program
-  void updateActive() {
-    if (activeProgram) {
-      activeProgram->update();
-    }
-  }
+    // Update the active program
+    void updateActive();
 
-  // Render the active program
-  void renderActive() {
-    if (activeProgram) {
-      activeProgram->render();
-    }
-  }
+    // Render the active program
+    void renderActive();
 
-  // Cleanup all programs
-  void cleanupAll() {
-    for (auto& program : programs) {
-      program->cleanup();
-    }
-  }
+    // Cleanup all programs
+    void cleanupAll();
 
-  // Set the active program by name
-  void setActiveProgram(const char* programName) {
-    for (auto& program : programs) {
-      if (strcmp(program->getProgramName(), programName) == 0) {
-        activeProgram = program.get();
-        return;
-      }
-    }
-    activeProgram = nullptr;
-  }
+    // Set the active program by name
+    void setActiveProgram(const char* programName);
 
-  // Get the name of the currently active program
-  const char* getActiveProgramName() const {
-    if (activeProgram) {
-      return activeProgram->getProgramName();
-    }
-    return "None";
-  }
+    // Get the name of the currently active program
+    const char* getActiveProgramName() const;
 };
 
-#endif 
+#endif
 

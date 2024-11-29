@@ -3,16 +3,21 @@
 
 #include "file_manager.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef enum { 
   STATE_DESKTOP,
   STATE_FILE_MANAGER,
-  STATE_DOOM,
+  STATE_BLOOD_MOON_3D,
 } AppState;
 
 // Run General Purpose Mode
 void gpm_main(); 
 
-// Start file manager 
-void init_file_manager();
+#ifdef __cplusplus
+}
+#endif
 
 #endif // OS_H

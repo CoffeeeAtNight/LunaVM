@@ -30,7 +30,7 @@
 
 #pragma once
 
-#include "../build/external/raylib-master/src/raylib.h"
+#include "raylib.h"
 
 #if defined(__cplusplus)
 extern "C" {            // Prevents name mangling of functions

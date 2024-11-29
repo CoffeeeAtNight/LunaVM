@@ -1,6 +1,6 @@
 #include "../include/graphic.h"
 #include "../include/resource_dir.h"
-#include "../build/external/raylib-master/src/raylib.h"
+#include "raylib.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -115,11 +115,11 @@ void render_desktop(AppState* currentState)
       if(TRANSITION_STATE)
       {
         // START Blood Moon 3D
-        printf("[i] Starting Blood Moon 3D");
+        printf("[i] Starting Blood Moon 3D\n");
         START_MENU_OPEN = false;
         START_MENU_ONE_OPEN = false;
         TRANSITION_STATE = false;
-        *currentState = STATE_DOOM; 
+        *currentState = STATE_BLOOD_MOON_3D; 
       }
     }
   }
@@ -181,23 +181,12 @@ void render_doom()
   EndDrawing();
 }
 
-void render(AppState* currentState, ProgramManager* pManager)
+void render(AppState* currentState)
 {
   // Setup the back buffer for drawing (clear color and depth buffers)
   ClearBackground(DARKGRAY);
   
-  switch (*currentState) {
-    case STATE_DESKTOP:
-      // Display the UI of the desktop
-      render_desktop(currentState);
-      break;
-    case STATE_FILE_MANAGER:
-      render_file_manager();
-      break;
-    case STATE_DOOM:
-      render_doom();
-      break;
-  }
+  render_desktop(currentState);
 }
 
 int initialize_render_ctx()

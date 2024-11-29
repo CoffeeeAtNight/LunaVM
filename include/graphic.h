@@ -2,8 +2,12 @@
 #define GRAPHIC_H
 
 #include "../include/resource_dir.h"
-#include "../build/external/raylib-master/src/raylib.h"
+#include "raylib.h"
 #include "os.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef enum {
   SM = 45,
@@ -28,5 +32,9 @@ void render(AppState* currentState);
 void render_dektop();
 void render_file_manager();
 void render_doom();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // GRAPHIC_H
