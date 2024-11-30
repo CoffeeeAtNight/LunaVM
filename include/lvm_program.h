@@ -3,6 +3,7 @@
 
 #include "../raylib/src/raylib.h"
 #include <cstdint>
+#include <string>
 
 class LvmProgram {
 public:
@@ -25,7 +26,7 @@ public:
 
   virtual ~LvmProgram() = default;
 
-  virtual const char* getProgramName() const = 0;
+  virtual const std::string& getProgramName() const = 0;
   virtual void init() = 0;
   virtual void update() = 0;
   virtual void render() = 0;

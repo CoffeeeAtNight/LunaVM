@@ -5,11 +5,17 @@
 #include "lvm_program.h"
 
 class BloodMoon3d : public LvmProgram {
+private:
+  std::string progamName = "BloodMoon3D";
+  bool initialized = false;
 public:
-    BloodMoon3d(int appWinX, int appWinY, int appWinW, int appWinH);
+    BloodMoon3d();
     ~BloodMoon3d() override;
 
-    const std::string* getProgramName() const override;
+    const std::string& getProgramName() const override {
+      return progamName;
+    };
+
     void init() override;
     void update() override;
     void render() override;

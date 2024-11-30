@@ -1,9 +1,15 @@
 #include "../include/program_manager.h"
 #include <iostream>
 #include <cstring> 
+#include <ostream>
+#include <string>
 
 void ProgramManager::registerProgram(std::unique_ptr<LvmProgram> program) {
-  programs.push_back(std::move(program));
+  if (program) {
+    programs.push_back(std::move(program));
+  } else {
+    std::cerr << "Error: Attempted to register a null program!" << std::endl;
+  }
 }
 
 void ProgramManager::initAll() {
@@ -19,8 +25,10 @@ void ProgramManager::updateActive() {
 }
 
 void ProgramManager::renderActive() {
-  if (activeProgram) {
+  if (activeProgram != nullptr) {
     activeProgram->render();
+  } else {
+    std::cout << "Null ptr in active render" << "\n";
   }
 }
 
@@ -30,34 +38,32 @@ void ProgramManager::cleanupAll() {
   }
 }
 
-void ProgramManager::setActiveProgram(const char* programName) {
-  std::cout << "Still works?" << "\n";
+void ProgramManager::setActiveProgram(const std::string* programName) {
   for (auto& program : programs) {
     if (program == nullptr) {
       std::cout << "Error: program is null!" << std::endl;
       continue; // Skip null programs
     }
 
-    const char* name = program->getProgramName();
-    if (name == nullptr) {
+    const std::string name = program->getProgramName();
+    if (name == "") {
       std::cout << "Error: program name is null!" << std::endl;
       continue; // Skip programs with invalid names
     }
 
-    if (strcmp(name, programName) == 0) {
+    if (name == *programName) {
       std::cout << "Program name was correct!!" << "\n";
       activeProgram = program.get();
       return;
     }
   }
-  std::cout << "Damn wrong program name ..." << "\n";
   activeProgram = nullptr;
 }
 
-const char* ProgramManager::getActiveProgramName() const {
+const std::string ProgramManager::getActiveProgramName() const {
   if (activeProgram) {
     return activeProgram->getProgramName();
   }
-  return "None";
+  return "";
 }
 

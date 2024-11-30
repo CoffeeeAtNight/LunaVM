@@ -31,10 +31,11 @@ public:
     void cleanupAll();
 
     // Set the active program by name
-    void setActiveProgram(const char* programName);
+    void setActiveProgram(const std::string* programName);
 
     // Get the name of the currently active program
-    const char* getActiveProgramName() const;
+    const std::string getActiveProgramName() const;
+
 };
 
 #endif

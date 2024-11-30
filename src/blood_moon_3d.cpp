@@ -1,13 +1,9 @@
-#include "../../include/blood_moon_3d.h"
+#include "../include/blood_moon_3d.h"
 #include <iostream>
 
 // Constructor
-BloodMoon3d::BloodMoon3d(int appWinX, int appWinY, int appWinW, int appWinH) : LvmProgram(0,0,0,0,true) {
+BloodMoon3d::BloodMoon3d() : LvmProgram(0, 0, 0, 0, true) {
   std::cout << "BloodMoon3d initialized as a 3D application." << std::endl;
-  _appWinX = appWinX;
-  _appWinY = appWinY;
-  _appWinW = appWinW;
-  _appWinH = appWinH;
 }
 
 // Destructor
@@ -15,11 +11,11 @@ BloodMoon3d::~BloodMoon3d() {
   std::cout << "BloodMoon3d resources cleaned up." << std::endl;
 }
 
-// Return program name
-const char* BloodMoon3d::getProgramName() const { return "BloodMoon3d"; }
 
 // Initialize the program
 void BloodMoon3d::init() {
+  if(initialized) return; 
+  
   std::cout << "Initializing BloodMoon3d..." << std::endl;
   camera.position = (Vector3){ 0.0f, 2.0f, 4.0f };    // Camera position
   camera.target = (Vector3){ 0.0f, 2.0f, 0.0f };      // Camera looking at point
@@ -27,6 +23,7 @@ void BloodMoon3d::init() {
   camera.fovy = 60.0f;                                // Camera field-of-view Y
   camera.projection = CAMERA_PERSPECTIVE;
   cameraMode = CAMERA_FIRST_PERSON;
+  initialized = true;
 }
 
 // Update logic
@@ -47,7 +44,7 @@ void BloodMoon3d::render() {
   UpdateCameraPro(&camera, movement, rotation, zoom);
   BeginDrawing();
 
-  DrawFPS(30, 30);
+  DrawFPS(30, 90);
 
   DisableCursor();
   BeginScissorMode(_appWinX, _appWinY, _appWinW, _appWinH);

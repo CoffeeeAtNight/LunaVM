@@ -1,6 +1,5 @@
 #include "../include/os.h"
 #include "../include/graphic.h"
-#include <iostream>
 #include <memory>
 #include <stdio.h>
 #include <string>
@@ -15,19 +14,28 @@ const std::vector<std::string> listOfPrograms = {
 
 void register_programs(ProgramManager* pManager)
 {
-  pManager->registerProgram(std::unique_ptr<BloodMoon3d>());
+  pManager->registerProgram(std::make_unique<BloodMoon3d>());
 };
 
 void update(ProgramManager* pManager) 
 {
+}
+
+void render_main(ProgramManager* pManager)
+{
+
+  render(&CURRENT_STATE);
+
   if (CURRENT_STATE == STATE_BLOOD_MOON_3D)
   {
-    std::cout << "Blood Moon 3D started ..." << "\n";
-    pManager->setActiveProgram("BloodMoon3d");
+    std::string programName = std::string("BloodMoon3D"); 
+   
+    pManager->setActiveProgram(&programName);
+    pManager->initAll(); 
     pManager->renderActive();
     pManager->updateActive();
-    pManager->initAll(); 
   }
+
 }
 
 void gpm_main()
@@ -44,7 +52,7 @@ void gpm_main()
   while (!WindowShouldClose()) {
     process_input(&CURRENT_STATE);
     update(&pManager);
-    render(&CURRENT_STATE);
+    render_main(&pManager);
   }
 
   CloseWindow();
