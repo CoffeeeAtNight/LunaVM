@@ -12,11 +12,6 @@ void ProgramManager::registerProgram(std::unique_ptr<LvmProgram> program) {
   }
 }
 
-void ProgramManager::initAll() {
-  for (auto& program : programs) {
-    program->init();
-  }
-}
 
 void ProgramManager::updateActive() {
   if (activeProgram) {

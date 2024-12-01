@@ -27,7 +27,7 @@ void setup_desktop();
 AppWindowCtx setup_app_window(const char* windowTitle);
 void render_ui();
 void process_input(AppState* currentState);
-void render(AppState* currentState);
+void render_ui_init(AppState* currentState);
 
 void render_dektop();
 void render_file_manager();

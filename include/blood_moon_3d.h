@@ -8,6 +8,8 @@ class BloodMoon3d : public LvmProgram {
 private:
   std::string progamName = "BloodMoon3D";
   bool initialized = false;
+
+  void init() override;
 public:
     BloodMoon3d();
     ~BloodMoon3d() override;
@@ -16,7 +18,6 @@ public:
       return progamName;
     };
 
-    void init() override;
     void update() override;
     void render() override;
     void onFocus() override;

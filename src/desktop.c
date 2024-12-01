@@ -1,4 +1,4 @@
-#include "../include/graphic.h"
+#include "../include/desktop.h"
 #include "../include/resource_dir.h"
 #include "raylib.h"
 #include <stdio.h>
@@ -181,7 +181,7 @@ void render_doom()
   EndDrawing();
 }
 
-void render(AppState* currentState)
+void render_ui_init(AppState* currentState)
 {
   // Setup the back buffer for drawing (clear color and depth buffers)
   ClearBackground(DARKGRAY);
@@ -203,6 +203,7 @@ int initialize_render_ctx()
   // Cap to 60 FPS
   SetTargetFPS(60);
 
+  // TODO REMOVE OLD CAM
   CAMERA.position = (Vector3){ 0.0f, 2.0f, 4.0f };    // Camera position
   CAMERA.target = (Vector3){ 0.0f, 2.0f, 0.0f };      // Camera looking at point
   CAMERA.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)

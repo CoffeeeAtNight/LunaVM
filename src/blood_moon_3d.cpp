@@ -2,8 +2,9 @@
 #include <iostream>
 
 // Constructor
-BloodMoon3d::BloodMoon3d() : LvmProgram(0, 0, 0, 0, true) {
+BloodMoon3d::BloodMoon3d() : LvmProgram(true) {
   std::cout << "BloodMoon3d initialized as a 3D application." << std::endl;
+  init();
 }
 
 // Destructor
@@ -14,50 +15,80 @@ BloodMoon3d::~BloodMoon3d() {
 
 // Initialize the program
 void BloodMoon3d::init() {
-  if(initialized) return; 
-  
-  std::cout << "Initializing BloodMoon3d..." << std::endl;
-  camera.position = (Vector3){ 0.0f, 2.0f, 4.0f };    // Camera position
-  camera.target = (Vector3){ 0.0f, 2.0f, 0.0f };      // Camera looking at point
-  camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
-  camera.fovy = 60.0f;                                // Camera field-of-view Y
-  camera.projection = CAMERA_PERSPECTIVE;
-  cameraMode = CAMERA_FIRST_PERSON;
-  initialized = true;
+ 
 }
 
 // Update logic
 void BloodMoon3d::update() {
   std::cout << "Updating BloodMoon3d..." << std::endl;
 
-  float deltaTime = GetFrameTime();
-  if (IsKeyDown(KEY_LEFT)) rotation.x -= 1.5f * deltaTime;
-  if (IsKeyDown(KEY_RIGHT)) rotation.x += 1.5f * deltaTime;
-  if (IsKeyDown(KEY_UP)) rotation.y -= 1.5f * deltaTime;
-  if (IsKeyDown(KEY_DOWN)) rotation.y += 1.5f * deltaTime;
+  float deltaTime = GetFrameTime(); // Frame time for smooth movement
+
+  // Handle camera movement with W, A, S, D keys
+  if (IsKeyDown(KEY_W)) {
+    camera.position.z -= 5.0f * deltaTime;
+    camera.target.z -= 5.0f * deltaTime;
+  }
+  if (IsKeyDown(KEY_S)) {
+    camera.position.z += 5.0f * deltaTime;
+    camera.target.z += 5.0f * deltaTime;
+  }
+  if (IsKeyDown(KEY_A)) {
+    camera.position.x -= 5.0f * deltaTime;
+    camera.target.x -= 5.0f * deltaTime;
+  }
+  if (IsKeyDown(KEY_D)) {
+    camera.position.x += 5.0f * deltaTime;
+    camera.target.x += 5.0f * deltaTime;
+  }
+
+  // Handle rotation with Arrow Keys
+  if (IsKeyDown(KEY_LEFT)) {
+    camera.target.x -= 1.0f * deltaTime;
+  }
+  if (IsKeyDown(KEY_RIGHT)) {
+    camera.target.x += 1.0f * deltaTime;
+  }
+  if (IsKeyDown(KEY_UP)) {
+    camera.target.y += 1.0f * deltaTime;
+  }
+  if (IsKeyDown(KEY_DOWN)) {
+    camera.target.y -= 1.0f * deltaTime;
+  }
+
+  UpdateCameraPro(&camera, movement, rotation, zoom);
 }
+
+
 
 // Render the scene
 void BloodMoon3d::render() {
   std::cout << "Rendering BloodMoon3d..." << std::endl;
+  std::cout << "Movement: " << movement.x << ", " << movement.y << ", " << movement.z << std::endl;
+  std::cout << "Rotation: " << rotation.x << ", " << rotation.y << ", " << rotation.z << std::endl;
+  std::cout << "Zoom: " << zoom << std::endl;
 
-  UpdateCameraPro(&camera, movement, rotation, zoom);
   BeginDrawing();
 
-  DrawFPS(30, 90);
+  setupLvmAppWindow();
 
   DisableCursor();
-  BeginScissorMode(_appWinX, _appWinY, _appWinW, _appWinH);
+  BeginScissorMode(_appWinRenderAreaX, _appWinRenderAreaY, _appWinRenderAreaW, _appWinRenderAreaH);
+  std::cout << "Entering 3D Mode" << std::endl;
   BeginMode3D(camera);
+
+  ClearBackground(BLACK);
+  std::cout << "Camera position: " << camera.position.x << ", " << camera.position.y << ", " << camera.position.z << std::endl;
+  std::cout << "Camera target: " << camera.target.x << ", " << camera.target.y << ", " << camera.target.z << std::endl;
 
   DrawPlane((Vector3){ 0.0f, 0.0f, 0.0f }, (Vector2){ 32.0f, 32.0f }, LIGHTGRAY);
   DrawCube((Vector3){ -16.0f, 2.5f, 0.0f }, 1.0f, 5.0f, 32.0f, BLUE);
   DrawCube((Vector3){ 16.0f, 2.5f, 0.0f }, 1.0f, 5.0f, 32.0f, LIME); 
   DrawCube((Vector3){ 0.0f, 2.5f, 16.0f }, 32.0f, 5.0f, 1.0f, GOLD);
   Vector3 cubePosition = { 
-      (float)(_appWinX - (float)mWindowWidth / 2) / mWindowWidth * 10.0f,
+      (float)(_appWinRenderAreaX - (float)W_WIDTH / 2) / W_WIDTH * 10.0f,
       5.0f,     
-      (float)(_appWinY - (float)mWindowHeight / 2) / mWindowHeight * 10.0f 
+      (float)(_appWinRenderAreaY - (float)W_HEIGHT / 2) / W_HEIGHT * 10.0f 
   };
   DrawCube(cubePosition, 1.0f, 1.0f, 1.0f, BLUE);
   DrawCubeWires(cubePosition, 1.0f, 1.0f, 1.0f, MAROON);
