@@ -23,6 +23,9 @@ public:
     void onFocus() override;
     void onBlur() override;
     void cleanup() override;
+
+  float movementSpeed = 5.f;
+  float rotationSpeed = 5.f;
 };
 
 #endif // BLOOD_MOON_3D_H

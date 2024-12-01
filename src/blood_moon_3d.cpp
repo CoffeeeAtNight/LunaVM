@@ -22,41 +22,40 @@ void BloodMoon3d::init() {
 void BloodMoon3d::update() {
   std::cout << "Updating BloodMoon3d..." << std::endl;
 
-  float deltaTime = GetFrameTime(); // Frame time for smooth movement
+  float deltaTime = GetFrameTime(); 
 
   // Handle camera movement with W, A, S, D keys
   if (IsKeyDown(KEY_W)) {
-    camera.position.z -= 5.0f * deltaTime;
-    camera.target.z -= 5.0f * deltaTime;
+    camera.position.z -= movementSpeed * deltaTime;
+    camera.target.z -= movementSpeed * deltaTime;
   }
   if (IsKeyDown(KEY_S)) {
-    camera.position.z += 5.0f * deltaTime;
-    camera.target.z += 5.0f * deltaTime;
+    camera.position.z += movementSpeed * deltaTime;
+    camera.target.z += movementSpeed* deltaTime;
   }
   if (IsKeyDown(KEY_A)) {
-    camera.position.x -= 5.0f * deltaTime;
-    camera.target.x -= 5.0f * deltaTime;
+    camera.position.x -= movementSpeed* deltaTime;
+    camera.target.x -= movementSpeed* deltaTime;
   }
   if (IsKeyDown(KEY_D)) {
-    camera.position.x += 5.0f * deltaTime;
-    camera.target.x += 5.0f * deltaTime;
+    camera.position.x += movementSpeed* deltaTime;
+    camera.target.x += movementSpeed* deltaTime;
   }
 
   // Handle rotation with Arrow Keys
   if (IsKeyDown(KEY_LEFT)) {
-    camera.target.x -= 1.0f * deltaTime;
+    camera.target.x -= rotationSpeed* deltaTime;
   }
   if (IsKeyDown(KEY_RIGHT)) {
-    camera.target.x += 1.0f * deltaTime;
+    camera.target.x += rotationSpeed* deltaTime;
   }
   if (IsKeyDown(KEY_UP)) {
-    camera.target.y += 1.0f * deltaTime;
+    camera.target.y += rotationSpeed* deltaTime;
   }
   if (IsKeyDown(KEY_DOWN)) {
-    camera.target.y -= 1.0f * deltaTime;
+    camera.target.y -= rotationSpeed* deltaTime;
   }
 
-  UpdateCameraPro(&camera, movement, rotation, zoom);
 }
 
 
